@@ -1,0 +1,30 @@
+# solve a two-dimensional square with uniform XS
+#
+# run as
+#  $ milonga square.mil [ --volumes | --elements ]
+
+MESH DIMENSIONS 2 FILE_PATH square.msh 
+
+# the material gets automatically linked to the
+# physical entity named "fuel" in the mesh 
+MATERIAL fuel D 1 nuSigmaF 3e-3 SigmaA 1e-3
+
+# there physical entity named "external" gets the following BC
+PHYSICAL_ENTITY external BC vacuum
+
+# advance one milonga step (i.e, solve the problem)
+MILONGA_STEP
+
+PRINT_FUNCTION phi1 HEADER
+PRINT TEXT "\# keff  = " %.8f keff
+
+# compute the peak factor
+VAR phimax intphi
+MESH_FIND_MAX  FUNCTION phi1           MAX phimax
+MESH_INTEGRATE FUNCTION phi1 OVER fuel RESULT intphi
+fp = phimax * fuel_vol / intphi
+PRINT TEXT "\# peak factor =" %.3f fp
+
+# post-processing in vtk and gmsh format
+MESH_POST FILE_PATH square_phi.vtk   phi1
+MESH_POST FILE_PATH square_phi.msh   phi1
