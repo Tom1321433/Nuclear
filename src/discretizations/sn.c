@@ -20,6 +20,8 @@
  *------------------- ------------  ----    --------  --     -       -         -
  */
 
+#include <stdlib.h>
+
 #include <gsl/gsl_math.h>
 
 #include "../milonga.h"
@@ -27,6 +29,24 @@
 // direcciones y pesos para ordenadas discretas
 double **Omega;
 double *w;
+
+int sn_free_weights(void) {
+
+  int m;
+
+  if (Omega != NULL) {
+    for (m = 0; m < milonga.directions; m++) {
+      free(Omega[m]);
+    }
+    free(Omega);
+    Omega = NULL;
+  }
+
+  free(w);
+  w = NULL;
+
+  return WASORA_RUNTIME_OK;
+}
 
 // tabla 4-1 de lewiss (p 162)
 // coincide con la tabla 1 de la pag. 208 de stammler-abbate
@@ -50,6 +70,8 @@ double *w;
 int sn_init_weights(void) {
   
   int m, n, j;
+
+  wasora_call(sn_free_weights());
   
   // inicializacion de pesos y direcciones SN
   w = calloc(milonga.directions, sizeof(double));

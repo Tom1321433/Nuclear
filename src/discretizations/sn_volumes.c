@@ -425,7 +425,7 @@ int sn_volumes_results_fill_power(void) {
 #define __FUNCT__ "sn_volumes_problem_free"
 int sn_volumes_problem_free(void) {
   
-  int g;
+  int g, n;
   
   if (wasora_mesh.main_mesh != NULL && wasora_mesh.main_mesh->n_cells != 0) {
     if (milonga.functions.phi != NULL) {  
@@ -440,9 +440,18 @@ int sn_volumes_problem_free(void) {
       milonga.functions.pow->data_value = NULL;
       milonga.functions.pow->var_argument = NULL;      
     }
+    if (milonga.functions.psi != NULL) {
+      for (n = 0; n < milonga.directions; n++) {
+        for (g = 0; g < milonga.groups; g++) {
+          free(milonga.functions.psi[n][g]->data_value);
+          milonga.functions.psi[n][g]->data_value = NULL;
+        }
+      }
+    }
 
     mesh_free(wasora_mesh.main_mesh);
   }
+  wasora_call(sn_free_weights());
    
   return WASORA_RUNTIME_OK;
 }

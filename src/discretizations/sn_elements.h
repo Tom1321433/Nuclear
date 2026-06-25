@@ -47,3 +47,4 @@ extern int sn_elements_add_vacuum_bc(node_t *, double *);
 extern int sn_elements_add_mirror_bc(node_t *, double *);
 
 extern int sn_init_weights(void);
+extern int sn_free_weights(void);

@@ -41,3 +41,4 @@ extern double sn_volumes_cell_integral(cell_t *, expr_t *);
 
 
 extern int sn_init_weights(void);
+extern int sn_free_weights(void);

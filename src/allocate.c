@@ -23,6 +23,7 @@
 #include <math.h>
 #include <gsl/gsl_math.h>
 
+#include <petscksp.h>
 #include <slepceps.h>
 
 #include "milonga.h"
@@ -113,11 +114,14 @@ int milonga_free_global_vectors(void) {
   if (milonga.phi != PETSC_NULL) {
     petsc_call(VecDestroy(&milonga.phi));
   }
+  if (milonga.S != PETSC_NULL) {
+    petsc_call(VecDestroy(&milonga.S));
+  }
   if (milonga.guess != PETSC_NULL) {
     petsc_call(VecDestroy(&milonga.guess));
   }
   if (milonga.ksp != PETSC_NULL) {
-    petsc_call(EPSDestroy(&milonga.eps));
+    petsc_call(KSPDestroy(&milonga.ksp));
   }
   if (milonga.eps != PETSC_NULL) {
     petsc_call(EPSDestroy(&milonga.eps));

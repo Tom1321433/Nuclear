@@ -465,8 +465,12 @@ int sn_elements_free_elemental_objects(void) {
   A = NULL;
   gsl_matrix_free(X);
   X = NULL;
+  gsl_vector_free(S);
+  S = NULL;
 
   // matrices intermedias
+  gsl_matrix_free(P);
+  P = NULL;
   gsl_matrix_free(OMEGAB);
   OMEGAB = NULL;
   gsl_matrix_free(AH);
@@ -483,6 +487,9 @@ int sn_elements_free_elemental_objects(void) {
   // matriz elemental de fision
   gsl_matrix_free(Xi);
   Xi = NULL;
+  // vector elemental de fuentes
+  gsl_vector_free(Si);
+  Si = NULL;
 
   PetscFunctionReturn(WASORA_RUNTIME_OK);
 }
@@ -871,6 +878,7 @@ int sn_elements_problem_free(void) {
       for (n = 0; n < milonga.directions; n++) {
 	for (g = 0; g < milonga.groups; g++) {
 	  free(milonga.functions.psi[n][g]->data_value);
+	  milonga.functions.psi[n][g]->data_value = NULL;
 	}
 	free(milonga.functions.psi[n]);
       }
@@ -878,6 +886,7 @@ int sn_elements_problem_free(void) {
   }
   
   sn_elements_free_elemental_objects();
+  wasora_call(sn_free_weights());
   mesh_free(wasora_mesh.main_mesh);
   
   

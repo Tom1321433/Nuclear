@@ -421,6 +421,8 @@ int diffusion_elements_free_elemental_objects(void) {
   A = NULL;
   gsl_matrix_free(X);
   X = NULL;
+  gsl_vector_free(S);
+  S = NULL;
 
   // matrices intermedias
   gsl_matrix_free(DB);
@@ -439,6 +441,12 @@ int diffusion_elements_free_elemental_objects(void) {
   // matriz elemental de fision
   gsl_matrix_free(Xi);
   Xi = NULL;
+  // matriz elemental de superficies de contorno
+  gsl_matrix_free(Ni);
+  Ni = NULL;
+  // vector elemental de fuentes
+  gsl_vector_free(Si);
+  Si = NULL;
 
   return WASORA_RUNTIME_OK;
 
